@@ -54,7 +54,21 @@ public class FakeDB
 
     public void store(Meal meal)
     {
+        boolean added = false;
 
+        for (Meal m : mealList)
+        {
+            if (m.getId() == meal.getId())
+            {
+                m.setDescription(meal.getDescription());
+                m.setDateTime(meal.getDateTime());
+                m.setCalories(meal.getCalories());
+                added = true;
+            }
+        }
+
+        if (!added)
+            mealList.add(meal);
     }
 
     public static FakeDB getInstance()

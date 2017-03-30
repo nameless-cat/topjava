@@ -33,7 +33,7 @@
             <div class="error">
                 <span>${timeError != null ? timeError : ""}</span>
             </div>
-            <td><input name="time" id="time" size="3" maxlength="3" value="${meal != null ? meal.getTime() : ""}"/></td>
+            <td><input type="datetime" name="time" id="time" size="20" maxlength="20" value="${meal != null ? meal.getDateTime() : ""}"/></td>
         </tr>
         <tr>
             <td><label for="calories">Calories</label></td>

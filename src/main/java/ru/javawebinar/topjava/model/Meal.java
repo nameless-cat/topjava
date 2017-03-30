@@ -61,4 +61,19 @@ public class Meal {
     {
         return id;
     }
+
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+
+    public void setDateTime(LocalDateTime dateTime)
+    {
+        this.dateTime = dateTime;
+    }
+
+    public void setCalories(int calories)
+    {
+        this.calories = calories;
+    }
 }
