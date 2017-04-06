@@ -69,13 +69,11 @@ public class InMemoryUserRepositoryImpl
     {
         LOG.info("getByEmail " + email);
 
-        User user = getAll()
+        return getAll()
                 .stream()
                 .filter(u -> u.getEmail().equals(email))
                 .findFirst()
                 .orElse(null);
-
-        return user;
     }
 
     public static void main(String[] args)
