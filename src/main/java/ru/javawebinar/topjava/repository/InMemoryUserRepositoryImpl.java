@@ -69,20 +69,13 @@ public class InMemoryUserRepositoryImpl
     {
         LOG.info("getByEmail " + email);
 
-        try
-        {
-            User user = getAll()
-                    .stream()
-                    .filter(u -> u.getEmail().equals(email))
-                    .findAny()
-                    .get();
+        User user = getAll()
+                .stream()
+                .filter(u -> u.getEmail().equals(email))
+                .findFirst()
+                .orElse(null);
 
-            return user;
-
-        } catch (NoSuchElementException e)
-        {
-            return null;
-        }
+        return user;
     }
 
     public static void main(String[] args)
