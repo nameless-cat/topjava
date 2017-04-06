@@ -21,6 +21,42 @@
     <h2>Meal list</h2>
     <a href="meals?action=create">Add Meal</a>
     <hr>
+    <form enctype="application/x-www-form-urlencoded" action="/meals" method="post">
+        <table class="filter_box" cellpadding="8" cellspacing="5">
+            <thead>
+            <tr>
+                <th>By date</th>
+                <th>By time</th>
+            </tr>
+            </thead>
+            <tr>
+                <td>
+                    <%--<label for="from_date">from</label>--%>
+                    <input type="date" name="fromDate" id="from_date" value="${fromDate}">
+                </td>
+                <td>
+                    <%--<label for="from_time">from</label>--%>
+                    <input type="time" name="fromTime" id="from_time" value="${fromTime}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <%--<label for="to_date">to</label>--%>
+                    <input type="date" name="toDate" id="to_date" value="${toDate}">
+                </td>
+                <td>
+                    <%--<label for="to_time">to</label>--%>
+                    <input type="time" name="toTime" id="to_time" value="${toTime}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="Filter" />
+                </td>
+            </tr>
+        </table>
+    </form>
+    <hr>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>
@@ -32,7 +68,7 @@
         </tr>
         </thead>
         <c:forEach items="${meals}" var="meal">
-            <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
+            <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>
             <tr class="${meal.exceed ? 'exceeded' : 'normal'}">
                 <td>
                         <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
