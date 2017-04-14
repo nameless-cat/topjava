@@ -18,7 +18,7 @@ import java.util.Collection;
 import static ru.javawebinar.topjava.UserTestData.ADMIN;
 import static ru.javawebinar.topjava.UserTestData.USER;
 
-@ContextConfiguration("classpath:spring/spring-app.xml")
+@ContextConfiguration(locations = {"classpath:spring/spring-app.xml", "classpath:spring/spring-db.xml"})
 @RunWith(SpringRunner.class)
 public class InMemoryAdminRestControllerSpringTest {
 
@@ -31,8 +31,8 @@ public class InMemoryAdminRestControllerSpringTest {
     @Before
     public void setUp() throws Exception {
         repository.getAll().forEach(u -> repository.delete(u.getId()));
-        repository.save(USER);
-        repository.save(ADMIN);
+        UserTestData.USER_ID = repository.save(UserTestData.getUser()).getId();
+        UserTestData.ADMIN_ID = repository.save(UserTestData.getAdmin()).getId();
     }
 
     @Test

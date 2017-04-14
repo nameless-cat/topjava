@@ -9,11 +9,11 @@ import java.util.Objects;
 import static ru.javawebinar.topjava.model.BaseEntity.START_SEQ;
 
 public class UserTestData {
-    public static final int USER_ID = START_SEQ;
-    public static final int ADMIN_ID = START_SEQ + 1;
+    public static int USER_ID;
+    public static int ADMIN_ID;
 
-    public static final User USER = new User(USER_ID, "User", "user@yandex.ru", "password", Role.ROLE_USER);
-    public static final User ADMIN = new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin", Role.ROLE_ADMIN);
+    public static User USER;
+    public static User ADMIN;
 
     public static final ModelMatcher<User> MATCHER = new ModelMatcher<>(
             (expected, actual) -> expected == actual ||
@@ -26,4 +26,18 @@ public class UserTestData {
 //                            && Objects.equals(expected.getRoles(), actual.getRoles())
                     )
     );
+
+    public static User getUser()
+    {
+        USER = new User(null, "User", "user@yandex.ru", "password", Role.ROLE_USER);
+        return USER;
+    }
+
+    public static User getAdmin()
+    {
+        ADMIN = new User(null, "Admin", "admin@gmail.com", "admin", Role.ROLE_ADMIN);
+        return ADMIN;
+    }
+
+
 }
