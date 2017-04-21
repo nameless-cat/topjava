@@ -17,7 +17,6 @@ import java.util.List;
 public class JpaMealRepositoryImpl
         implements MealRepository
 {
-
     @PersistenceContext
     EntityManager em;
 
@@ -34,29 +33,26 @@ public class JpaMealRepositoryImpl
 
             return meal;
         }
-        else if (em.find(Meal.class, meal.getId()).getUser().getId() != userId)
+        else if (get(meal.getId(), userId) == null)
         {
             return null;
         }
         else
         {
-            return em.merge(meal);
+            em.merge(meal);
         }
+
+        return meal;
     }
 
     @Override
     @Transactional
     public boolean delete(int id, int userId)
     {
-        Meal m = em.find(Meal.class, id);
-
-        if (m.getUser().getId() == userId)
-        {
-            em.remove(m);
-            return em.find(Meal.class, id) == null;
-        }
-        else
-            return false;
+        return em.createNamedQuery(User.DELETE)
+                .setParameter("id", id)
+                .setParameter("userId", userId)
+                .executeUpdate() != 0;
     }
 
     @Override
@@ -64,24 +60,24 @@ public class JpaMealRepositoryImpl
     {
         Meal m = em.find(Meal.class, id);
 
-        return (m.getUser().getId() == userId) ? m : null;
+        return (m != null && m.getUser().getId() == userId) ? m : null;
     }
 
     @Override
     public List<Meal> getAll(int userId)
     {
-        Query q = em.createNamedQuery(Meal.GET_ALL).setParameter("userId", userId);
-        return (List<Meal>) q.getResultList();
+        return em.createNamedQuery(Meal.GET_ALL, Meal.class)
+                .setParameter("userId", userId)
+                .getResultList();
     }
 
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId)
     {
-        Query q = em.createNamedQuery(Meal.GET_BETWEEN)
+        return em.createNamedQuery(Meal.GET_BETWEEN, Meal.class)
                 .setParameter("userId", userId)
                 .setParameter("startDate", startDate)
-                .setParameter("endDate", endDate);
-
-        return (List<Meal>) q.getResultList();
+                .setParameter("endDate", endDate)
+                .getResultList();
     }
 }

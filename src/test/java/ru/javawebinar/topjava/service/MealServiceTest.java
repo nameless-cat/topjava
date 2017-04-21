@@ -1,7 +1,14 @@
 package ru.javawebinar.topjava.service;
 
+import org.hibernate.PropertyValueException;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExternalResource;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
+import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -9,11 +16,16 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.rules.ExecutionTimeLogger;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
@@ -27,12 +39,25 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
-    static {
-        SLF4JBridgeHandler.install();
-    }
+    private static final Map<String, Integer> statistics;
 
     @Autowired
     private MealService service;
+
+    static {
+        SLF4JBridgeHandler.install();
+        statistics = new HashMap<>();
+    }
+
+    @AfterClass
+    public static void afterTests()
+    {
+        statistics.forEach((k, v) -> System.out.println(k + " : " + v + " ms"));
+    }
+
+    @Rule
+    public TestRule executionTimeLogger = new ExecutionTimeLogger(LoggerFactory.getLogger(MealServiceTest.class), statistics);
+
 
     @Test
     public void testDelete() throws Exception {
@@ -47,7 +72,8 @@ public class MealServiceTest {
 
     @Test
     public void testSave() throws Exception {
-        Meal created = getCreated();
+//        Meal created = getCreated();
+        Meal created = new Meal(null, " ", 0);
         service.save(created, USER_ID);
         MATCHER.assertCollectionEquals(Arrays.asList(created, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1), service.getAll(USER_ID));
     }
