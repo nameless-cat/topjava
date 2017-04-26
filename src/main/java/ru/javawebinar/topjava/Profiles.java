@@ -4,7 +4,8 @@ package ru.javawebinar.topjava;
  * User: gkislin
  * Date: 19.08.2014
  */
-public class Profiles {
+public class Profiles
+{
     public static final String
             POSTGRES_DB = "postgres",
             HSQL_DB = "hsqldb";
@@ -13,7 +14,8 @@ public class Profiles {
 
     public static final String
             JDBC = "jdbc",
-            JPA = "jpa";
+            JPA = "jpa",
+            DATA_JPA = "dataJpa";
 
     public static final String REPOSITORY_IMPLEMENTATION = JPA;
 }
