@@ -15,7 +15,7 @@ public class Profiles
     public static final String
             JDBC = "jdbc",
             JPA = "jpa",
-            DATA_JPA = "dataJpa";
+            DATA_JPA = "datajpa";
 
     public static final String REPOSITORY_IMPLEMENTATION = JPA;
 }

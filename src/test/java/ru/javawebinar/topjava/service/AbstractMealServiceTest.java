@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.AfterClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -35,14 +36,20 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@ActiveProfiles(Profiles.ACTIVE_DB)
-public class MealServiceTest {
-    private static final Logger LOG = LoggerFactory.getLogger(MealServiceTest.class);
+@ActiveProfiles(Profiles.HSQL_DB)
+@Ignore("Abstract class")
+public abstract class AbstractMealServiceTest {
+    private static Logger LOG = LoggerFactory.getLogger(AbstractMealServiceTest.class);
     private static StringBuilder results = new StringBuilder();
 
     static {
         // needed only for java.util.logging (postgres driver)
         SLF4JBridgeHandler.install();
+    }
+
+    public static void setLOG(Logger log)
+    {
+        LOG = log;
     }
 
     @Rule
