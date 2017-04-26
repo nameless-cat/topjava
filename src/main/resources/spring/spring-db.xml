@@ -18,15 +18,18 @@
     </jdbc:initialize-database>
 
 
-
-
     <beans profile="hsqldb">
         <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE"/>
+
+        <!--LocalDateTime to sql Timestamp converter bean-->
+
+        <bean id="jdbcHelper"
+              class="ru.javawebinar.topjava.repository.jdbc.JdbcMealRepositoryHelperHsqlDb"/>
 
         <!--no pooling-->
         <bean id="dataSource"
               class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-              p:driverClassName="org.hsqldb.jdbcDriver"
+              p:driverClassName="${database.driverClassName}"
               p:url="${database.url}"
               p:username="${database.username}"
               p:password="${database.password}"/>
@@ -34,6 +37,10 @@
 
     <beans profile="postgres">
         <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE"/>
+
+        <!--Placeholder bean for jdbc repository implementation-->
+        <bean id="jdbcHelper"
+              class="ru.javawebinar.topjava.repository.jdbc.JdbcMealRepositoryHelperPostgres"/>
 
         <bean id="dataSource"
               class="org.apache.tomcat.jdbc.pool.DataSource"
@@ -63,7 +70,8 @@
             <property name="jpaPropertyMap">
                 <map>
                     <entry key="#{T(org.hibernate.cfg.AvailableSettings).FORMAT_SQL}" value="${hibernate.format_sql}"/>
-                    <entry key="#{T(org.hibernate.cfg.AvailableSettings).USE_SQL_COMMENTS}" value="${hibernate.use_sql_comments}"/>
+                    <entry key="#{T(org.hibernate.cfg.AvailableSettings).USE_SQL_COMMENTS}"
+                           value="${hibernate.use_sql_comments}"/>
                     <!--<entry key="#{T(org.hibernate.cfg.AvailableSettings).HBM2DDL_AUTO}" value="${hibernate.hbm2ddl.auto}"/>-->
                 </map>
             </property>

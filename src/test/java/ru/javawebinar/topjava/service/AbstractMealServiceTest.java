@@ -36,7 +36,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@ActiveProfiles(Profiles.HSQL_DB)
+@ActiveProfiles(Profiles.POSTGRES_DB)
 @Ignore("Abstract class")
 public abstract class AbstractMealServiceTest {
     private static Logger LOG = LoggerFactory.getLogger(AbstractMealServiceTest.class);

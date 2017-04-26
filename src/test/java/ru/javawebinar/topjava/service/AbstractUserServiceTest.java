@@ -29,7 +29,7 @@ import static ru.javawebinar.topjava.UserTestData.*;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@ActiveProfiles(Profiles.POSTGRES_DB)
+@ActiveProfiles(Profiles.HSQL_DB)
 @Ignore("Abstract class")
 public abstract class AbstractUserServiceTest
 {
