@@ -65,4 +65,10 @@ public class JpaUserRepositoryImpl implements UserRepository {
     public List<User> getAll() {
         return em.createNamedQuery(User.ALL_SORTED, User.class).getResultList();
     }
+
+    @Override
+    public User getWithMeals(int userId)
+    {
+        throw new UnsupportedOperationException("Method not implemented");
+    }
 }

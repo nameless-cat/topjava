@@ -2,6 +2,9 @@ package ru.javawebinar.topjava.web;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
@@ -18,42 +21,54 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-public class MealServlet extends HttpServlet {
+public class MealServlet
+        extends HttpServlet
+{
 
-    private ConfigurableApplicationContext springContext;
+    private GenericXmlApplicationContext ctx;
     private MealRestController mealController;
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init(ServletConfig config) throws ServletException
+    {
         super.init(config);
-        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
-        mealController = springContext.getBean(MealRestController.class);
+        ctx = new GenericXmlApplicationContext();
+        ctx.getEnvironment().setActiveProfiles(Profiles.POSTGRES_DB, Profiles.JDBC);
+        ctx.load("spring/spring-app.xml", "spring/spring-db.xml");
+        ctx.refresh();
+        mealController = ctx.getBean(MealRestController.class);
     }
 
     @Override
-    public void destroy() {
-        springContext.close();
+    public void destroy()
+    {
+        ctx.close();
         super.destroy();
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
-        if (action == null) {
+        if (action == null)
+        {
             final Meal meal = new Meal(
                     LocalDateTime.parse(request.getParameter("dateTime")),
                     request.getParameter("description"),
                     Integer.valueOf(request.getParameter("calories")));
 
-            if (request.getParameter("id").isEmpty()) {
+            if (request.getParameter("id").isEmpty())
+            {
                 mealController.create(meal);
-            } else {
+            } else
+            {
                 mealController.update(meal, getId(request));
             }
             response.sendRedirect("meals");
 
-        } else if ("filter".equals(action)) {
+        } else if ("filter".equals(action))
+        {
             LocalDate startDate = DateTimeUtil.parseLocalDate(request.getParameter("startDate"));
             LocalDate endDate = DateTimeUtil.parseLocalDate(request.getParameter("endDate"));
             LocalTime startTime = DateTimeUtil.parseLocalTime(request.getParameter("startTime"));
@@ -64,10 +79,12 @@ public class MealServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         String action = request.getParameter("action");
 
-        switch (action == null ? "all" : action) {
+        switch (action == null ? "all" : action)
+        {
             case "delete":
                 int id = getId(request);
                 mealController.delete(id);
@@ -89,7 +106,8 @@ public class MealServlet extends HttpServlet {
         }
     }
 
-    private int getId(HttpServletRequest request) {
+    private int getId(HttpServletRequest request)
+    {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
         return Integer.valueOf(paramId);
     }

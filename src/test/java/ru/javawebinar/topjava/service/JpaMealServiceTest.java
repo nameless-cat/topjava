@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ActiveProfiles;
 import ru.javawebinar.topjava.Profiles;
@@ -15,6 +15,12 @@ public class JpaMealServiceTest extends AbstractMealServiceTest
     @BeforeClass
     public static void setUp()
     {
-        setLOG(LoggerFactory.getLogger(JpaMealServiceTest.class));
+        setLogClass(JpaMealServiceTest.class);
+        clearResult();
+    }
+
+    @AfterClass
+    public static void result() {
+        printResult();
     }
 }

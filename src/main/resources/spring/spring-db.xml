@@ -19,12 +19,12 @@
 
 
     <beans profile="hsqldb">
-        <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE"/>
 
         <!--LocalDateTime to sql Timestamp converter bean-->
-
         <bean id="jdbcHelper"
-              class="ru.javawebinar.topjava.repository.jdbc.JdbcMealRepositoryHelperHsqlDb"/>
+        class="ru.javawebinar.topjava.repository.jdbc.JdbcMealRepositoryHelperHsqlDb"/>
+
+        <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE"/>
 
         <!--no pooling-->
         <bean id="dataSource"
@@ -36,15 +36,16 @@
     </beans>
 
     <beans profile="postgres">
-        <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE"/>
 
         <!--Placeholder bean for jdbc repository implementation-->
         <bean id="jdbcHelper"
-              class="ru.javawebinar.topjava.repository.jdbc.JdbcMealRepositoryHelperPostgres"/>
+        class="ru.javawebinar.topjava.repository.jdbc.JdbcMealRepositoryHelperPostgres"/>
+
+        <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE"/>
 
         <bean id="dataSource"
               class="org.apache.tomcat.jdbc.pool.DataSource"
-              p:driverClassName="org.postgresql.Driver"
+              p:driverClassName="${database.driverClassName}"
               p:url="${database.url}"
               p:username="${database.username}"
               p:password="${database.password}"/>
@@ -72,6 +73,7 @@
                     <entry key="#{T(org.hibernate.cfg.AvailableSettings).FORMAT_SQL}" value="${hibernate.format_sql}"/>
                     <entry key="#{T(org.hibernate.cfg.AvailableSettings).USE_SQL_COMMENTS}"
                            value="${hibernate.use_sql_comments}"/>
+                    <entry key="#{T(org.hibernate.cfg.AvailableSettings).DIALECT}" value="${hibernate.dialect}" />
                     <!--<entry key="#{T(org.hibernate.cfg.AvailableSettings).HBM2DDL_AUTO}" value="${hibernate.hbm2ddl.auto}"/>-->
                 </map>
             </property>

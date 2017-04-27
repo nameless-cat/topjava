@@ -4,6 +4,7 @@ import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.matcher.ModelMatcher;
 import ru.javawebinar.topjava.model.User;
 
+import java.util.Collections;
 import java.util.Objects;
 
 import static ru.javawebinar.topjava.model.BaseEntity.START_SEQ;
@@ -14,6 +15,13 @@ public class UserTestData {
 
     public static final User USER = new User(USER_ID, "User", "user@yandex.ru", "password", Role.ROLE_USER);
     public static final User ADMIN = new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin", Role.ROLE_ADMIN);
+    public static final User NEW_TEST_USER = new User(
+            null,
+            "TestUser",
+            "new@gmail.com",
+            "newPass",
+            1555, false,
+            Collections.singleton(Role.ROLE_USER));
 
     public static final ModelMatcher<User> MATCHER = new ModelMatcher<>(
             (expected, actual) -> expected == actual ||

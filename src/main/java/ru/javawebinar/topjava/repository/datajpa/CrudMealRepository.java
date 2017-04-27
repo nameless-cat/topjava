@@ -34,4 +34,7 @@ public interface CrudMealRepository
     List<Meal> findByUserIdOrderByDateTimeDesc(int userId);
 
     List<Meal> findByUserIdAndDateTimeBetweenOrderByDateTimeDesc(int userId, LocalDateTime startDate, LocalDateTime endDate);
+
+    @Query("SELECT m FROM Meal m JOIN FETCH m.user WHERE m.id=?1")
+    Meal getWithUser(int id);
 }

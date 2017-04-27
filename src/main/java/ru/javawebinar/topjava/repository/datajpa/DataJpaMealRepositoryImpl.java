@@ -56,4 +56,10 @@ public class DataJpaMealRepositoryImpl
     {
         return crudRepository.findByUserIdAndDateTimeBetweenOrderByDateTimeDesc(userId, startDate, endDate);
     }
+
+    @Override
+    public Meal getWithUser(int id)
+    {
+        return crudRepository.getWithUser(id);
+    }
 }
