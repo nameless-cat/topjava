@@ -1,14 +1,18 @@
 package ru.javawebinar.topjava.model;
 
-import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
@@ -54,7 +58,7 @@ public class User extends NamedEntity {
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
-//    @Fetch(FetchMode.SUBSELECT)
+    @Fetch(FetchMode.SUBSELECT)
     @BatchSize(size = 200)
     private Set<Role> roles;
 
@@ -124,6 +128,11 @@ public class User extends NamedEntity {
 
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    public void setRoles(Set<Role> roles)
+    {
+        this.roles = roles;
     }
 
     public String getPassword() {

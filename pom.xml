@@ -28,6 +28,7 @@
         <postgresql.version>42.0.0</postgresql.version>
         <!--    Tests  -->
         <junit.version>4.12</junit.version>
+        <datasource-proxy.version>1.4.1</datasource-proxy.version>
 
         <!-- Hibernate -->
         <hibernate.version>5.2.9.Final</hibernate.version>
@@ -255,7 +256,12 @@
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>net.ttddyy</groupId>
+            <artifactId>datasource-proxy</artifactId>
+            <version>${datasource-proxy.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <profiles>

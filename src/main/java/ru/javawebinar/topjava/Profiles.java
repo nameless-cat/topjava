@@ -1,9 +1,11 @@
 package ru.javawebinar.topjava;
 
-public class Profiles {
-    private static final String
+public class Profiles
+{
+    public static final String
             POSTGRES_DB = "postgres",
-            HSQL_DB = "hsqldb";
+            HSQL_DB = "hsqldb",
+            POSTGRES_PROXY = "postgresDataSourceProxy";
 
     public static final String ACTIVE_DB = HSQL_DB;
 
@@ -18,16 +20,21 @@ public class Profiles {
 //            POSTGRES_DB = "postgres",
 //            HSQL_DB = "hsqldb";
 
-//  Get DB profile depending of DB driver in classpath
-    public static String getActiveDbProfile() {
-        try {
+    //  Get DB profile depending of DB driver in classpath
+    public static String getActiveDbProfile()
+    {
+        try
+        {
             Class.forName("org.postgresql.Driver");
-            return POSTGRES_DB;
-        } catch (ClassNotFoundException ex) {
-            try {
+            return POSTGRES_PROXY;
+        } catch (ClassNotFoundException ex)
+        {
+            try
+            {
                 Class.forName("org.hsqldb.jdbcDriver");
                 return Profiles.HSQL_DB;
-            } catch (ClassNotFoundException e) {
+            } catch (ClassNotFoundException e)
+            {
                 throw new IllegalStateException("Could not resolve DB profile");
             }
         }
