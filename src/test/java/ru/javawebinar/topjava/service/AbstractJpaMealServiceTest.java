@@ -5,7 +5,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.testng.Assert;
 import ru.javawebinar.topjava.Profiles;
-import sun.java2d.cmm.Profile;
 
 /**
  * Created by wwwtm on 03.05.2017.
