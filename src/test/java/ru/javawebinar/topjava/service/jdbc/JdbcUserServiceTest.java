@@ -10,6 +10,7 @@ public class JdbcUserServiceTest
         extends AbstractUserServiceTest
 {
 
+
     @Override
     public void testValidation() throws Exception
     {

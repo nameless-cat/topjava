@@ -3,12 +3,14 @@ package ru.javawebinar.topjava.service;
 import net.ttddyy.dsproxy.QueryCountHolder;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.testng.Assert;
 import ru.javawebinar.topjava.Profiles;
 
 /**
  * Created by wwwtm on 03.05.2017.
  */
+@Ignore("Abstract class")
 public abstract class AbstractJpaMealServiceTest extends AbstractMealServiceTest
 {
     private int expectedQueries;
