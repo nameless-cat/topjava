@@ -2,15 +2,40 @@ package ru.javawebinar.topjava;
 
 import ru.javawebinar.topjava.matcher.ModelMatcher;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.to.MealWithExceed;
 
 import java.time.Month;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import static java.time.LocalDateTime.of;
 import static ru.javawebinar.topjava.model.BaseEntity.START_SEQ;
+import static ru.javawebinar.topjava.util.MealsUtil.mealToMealWithExceed;
 
-public class MealTestData {
+public class MealTestData
+{
+    public static class MealDateTimeComparator
+            implements Comparator
+    {
+        @Override
+        public int compare(Object o1, Object o2)
+        {
+            if (o1 instanceof MealWithExceed && o2 instanceof MealWithExceed)
+            {
+                return ((MealWithExceed) o2).getDateTime().compareTo(((MealWithExceed) o1).getDateTime());
+
+            } else if (o1 instanceof Meal && o2 instanceof Meal)
+            {
+                return ((Meal) o2).getDateTime().compareTo(((Meal) o1).getDateTime());
+
+            } else
+            {
+                throw new ClassCastException("Both objects must be MealWithExceed or Meal");
+            }
+
+        }
+    }
 
     public static final ModelMatcher<Meal> MATCHER = new ModelMatcher<>();
 
@@ -26,13 +51,24 @@ public class MealTestData {
     public static final Meal ADMIN_MEAL1 = new Meal(ADMIN_MEAL_ID, of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510);
     public static final Meal ADMIN_MEAL2 = new Meal(ADMIN_MEAL_ID + 1, of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500);
 
-    public static final List<Meal> MEALS = Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
+    public static final MealWithExceed MEAL_WE1 = mealToMealWithExceed(MEAL1, false);
+    public static final MealWithExceed MEAL_WE2 = mealToMealWithExceed(MEAL2, false);
+    public static final MealWithExceed MEAL_WE3 = mealToMealWithExceed(MEAL3, false);
+    public static final MealWithExceed MEAL_WE4 = mealToMealWithExceed(MEAL4, true);
+    public static final MealWithExceed MEAL_WE5 = mealToMealWithExceed(MEAL5, true);
+    public static final MealWithExceed MEAL_WE6 = mealToMealWithExceed(MEAL6, true);
 
-    public static Meal getCreated() {
+    public static final List<Meal> MEALS = Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
+    public static final List<MealWithExceed> MEALS_WE = Arrays.asList(MEAL_WE6, MEAL_WE5, MEAL_WE4, MEAL_WE3, MEAL_WE2, MEAL_WE1);
+
+
+    public static Meal getCreated()
+    {
         return new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Созданный ужин", 300);
     }
 
-    public static Meal getUpdated() {
+    public static Meal getUpdated()
+    {
         return new Meal(MEAL1_ID, MEAL1.getDateTime(), "Обновленный завтрак", 200);
     }
 }

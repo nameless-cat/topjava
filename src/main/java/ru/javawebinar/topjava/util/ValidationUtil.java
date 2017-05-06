@@ -4,6 +4,9 @@ package ru.javawebinar.topjava.util;
 import ru.javawebinar.topjava.model.BaseEntity;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class ValidationUtil {
     private ValidationUtil() {
     }
@@ -40,5 +43,10 @@ public class ValidationUtil {
         } else if (entity.getId() != id) {
             throw new IllegalArgumentException(entity + " must be with id=" + id);
         }
+    }
+
+    public static boolean filterFormIsEmpty(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime)
+    {
+        return (startDate == null && endDate == null && startTime == null && endTime == null);
     }
 }

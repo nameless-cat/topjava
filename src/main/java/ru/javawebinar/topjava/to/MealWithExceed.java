@@ -55,4 +55,31 @@ public class MealWithExceed {
                 ", exceed=" + exceed +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MealWithExceed that = (MealWithExceed) o;
+
+        if (getCalories() != that.getCalories()) return false;
+        if (isExceed() != that.isExceed()) return false;
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
+        if (getDateTime() != null ? !getDateTime().equals(that.getDateTime()) : that.getDateTime() != null)
+            return false;
+        return getDescription() != null ? getDescription().equals(that.getDescription()) : that.getDescription() == null;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getDateTime() != null ? getDateTime().hashCode() : 0);
+        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
+        result = 31 * result + getCalories();
+        result = 31 * result + (isExceed() ? 1 : 0);
+        return result;
+    }
 }
