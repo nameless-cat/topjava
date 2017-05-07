@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,9 +22,11 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.*;
 
@@ -37,13 +40,12 @@ public class AppController
     private static final Logger LOG = LoggerFactory.getLogger(MealRestController.class);
 
     @Autowired
-    @Qualifier("mealServiceImpl")
     private MealService mealService;
 
     @RequestMapping(method = RequestMethod.GET, params = "!action")
     public String getAll(Model model)
     {
-        LOG.info("Run: {} {}", getClass().getSimpleName(), "getAll()");
+        LOG.info("Run: {}-{}", getClass().getSimpleName(), "getAll()");
         int userId = AuthorizedUser.id();
         List<MealWithExceed> meals = MealsUtil.getWithExceeded(mealService.getAll(userId), AuthorizedUser.getCaloriesPerDay());
         model.addAttribute("meals", meals);
@@ -53,7 +55,7 @@ public class AppController
     @RequestMapping(method = RequestMethod.GET, params = "action=create")
     public String getBlankMeal(Model model)
     {
-        LOG.info("Run: {} {}", getClass().getSimpleName(), "createMeal()");
+        LOG.info("Run: {}-{}", getClass().getSimpleName(), "createMeal()");
         model.addAttribute("meal", MealsUtil.blankMeal());
         return "meal";
     }
@@ -61,7 +63,7 @@ public class AppController
     @RequestMapping(method = RequestMethod.GET, params = "action=update")
     public String getExistedMealForUpdate(@RequestParam("id") int id, Model model) throws NotFoundException
     {
-        LOG.info("Run: {} {}", getClass().getSimpleName(), "editMeal()");
+        LOG.info("Run: {}-{}", getClass().getSimpleName(), "editMeal()");
 
         int userId = AuthorizedUser.id();
         Meal meal = mealService.get(id, userId);
@@ -72,7 +74,7 @@ public class AppController
     @RequestMapping(method = RequestMethod.GET, params = "action=delete")
     public String deleteMeal(@RequestParam("id") int id, Model model) throws NotFoundException
     {
-        LOG.info("Run: {} {}", getClass().getSimpleName(), "deleteMeal()");
+        LOG.info("Run: {}-{}", getClass().getSimpleName(), "deleteMeal()");
         int userId = AuthorizedUser.id();
         mealService.delete(id, userId);
         model.addAttribute("meals",
@@ -80,24 +82,42 @@ public class AppController
         return "meals";
     }
 
-    @RequestMapping(method = RequestMethod.POST, params = "!action")
-    public String updateMeal(@ModelAttribute("meal") Meal meal, Model model) throws Exception
+    @RequestMapping(method = RequestMethod.POST, params = "action=update")
+    public String updateMeal(@Valid @ModelAttribute("meal") Meal meal, BindingResult bindingResult, Model model)
+            throws IllegalArgumentException
     {
-        LOG.info("Run: {} {}", getClass().getSimpleName(), "updateMeal()");
+        LOG.info("Run: {}-{}", getClass().getSimpleName(), "updateMeal()");
 
-        int userId = AuthorizedUser.id();
-
-        if (meal.getId() != null)
+        if (meal.getId() == null)
         {
-            checkIdConsistent(meal, meal.getId());
-            mealService.update(meal, userId);
-        } else
-        {
-            checkNew(meal);
-            mealService.save(meal, userId);
+            LOG.debug("Failing meal edit process: id has null value");
+            throw new IllegalArgumentException();
         }
-        model.addAttribute("meals", MealsUtil.getWithExceeded(mealService.getAll(userId), AuthorizedUser.getCaloriesPerDay()));
-        return "meals";
+
+        if (hasInvalidCriticalFields(bindingResult))
+        {
+            return "meal";
+        }
+
+        mealService.update(meal, AuthorizedUser.id());
+        return "redirect:/meals";
+    }
+
+
+    @RequestMapping(method = RequestMethod.POST, params = "action=create")
+    public String createMeal(@Valid @ModelAttribute("meal") Meal meal, BindingResult bindingResult, Model model)
+    {
+        LOG.info("Run: {}-{}", getClass().getSimpleName(), "createMeal()");
+
+        if (hasInvalidCriticalFields(bindingResult))
+        {
+            return "meal";
+        }
+
+        meal.setId(null);
+        mealService.save(meal, AuthorizedUser.id());
+
+        return "redirect:/meals";
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "action=filter")
@@ -108,7 +128,7 @@ public class AppController
             @RequestParam(value = "endTime", required = false) LocalTime endTime,
             Model model)
     {
-        LOG.info("Run: {} {}", getClass().getSimpleName(), "filterMeals()");
+        LOG.info("Run: {}-{}", getClass().getSimpleName(), "filterMeals()");
 
         if (ValidationUtil.filterFormIsEmpty(startDate, endDate, startTime, endTime))
             return "redirect:/meals";
@@ -127,10 +147,11 @@ public class AppController
         return "meals";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public String httpServletRequestListener(HttpServletRequest request)
+    @RequestMapping(method = RequestMethod.POST, params = "!action")
+    public String defaultPostTo404()
     {
-        LOG.info("Run: {} {}", getClass().getSimpleName(), "httpServletRequestListener()");
-        return "404";
+        LOG.info("Run: {}-{}", getClass().getSimpleName(), "defaultPostTo404()");
+
+        throw new NotFoundException("Page not found");
     }
 }

@@ -131,15 +131,14 @@ public class AppControllerTest
         expected.sort(new MealTestData.MealDateTimeComparator());
 
         mockMvc.perform(post("/meals")
+                .param("action", "update")
                 .param("id", String.valueOf(MEAL1_ID))
                 .param("dateTime", String.valueOf(updated.getDateTime()))
                 .param("description", updated.getDescription())
                 .param("calories", String.valueOf(updated.getCalories())))
-                .andExpect(status().isOk())
-                .andExpect(view().name("meals"))
-                .andExpect(forwardedUrl("/WEB-INF/jsp/meals.jsp"))
-                .andExpect(model().attribute("meals", hasSize(6)))
-                .andExpect(model().attribute("meals", expected));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/meals"))
+                .andExpect(redirectedUrl("/meals"));
     }
 
     @Test
@@ -152,14 +151,104 @@ public class AppControllerTest
         expected.sort(new MealTestData.MealDateTimeComparator());
 
         mockMvc.perform(post("/meals")
+                .param("action", "create")
                 .param("dateTime", String.valueOf(meal.getDateTime()))
                 .param("description", meal.getDescription())
                 .param("calories", String.valueOf(meal.getCalories())))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/meals"))
+                .andExpect(redirectedUrl("/meals"));
+    }
+
+    @Test
+    public void createViaPostRequestWithWrongDescriptionMustReturnUserToForm() throws Exception
+    {
+        mockMvc.perform(post("/meals")
+                .param("action", "create")
+                .param("calories", "200")
+                .param("description", "")
+                .param("dateTime", "2014-12-03T21:00"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("meals"))
-                .andExpect(forwardedUrl("/WEB-INF/jsp/meals.jsp"))
-                .andExpect(model().attribute("meals", hasSize(7)))
-                .andExpect(model().attribute("meals", expected));
+                .andExpect(view().name("meal"))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"));
+    }
+
+    @Test
+    public void createViaPostRequestWithWrongCaloriesMustReturnUserToForm() throws Exception
+    {
+        mockMvc.perform(post("/meals")
+                .param("action", "create")
+                .param("calories", "+")
+                .param("description", "new description")
+                .param("dateTime", "2014-12-03T21:00"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("meal"))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"));
+    }
+
+    @Test
+    public void createViaPostRequestWithWrongDateTimeMustReturnUserToForm() throws Exception
+    {
+        mockMvc.perform(post("/meals")
+                .param("action", "create")
+                .param("calories", "200")
+                .param("description", "new description")
+                .param("dateTime", "+"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("meal"))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"));
+    }
+
+    @Test
+    public void updateViaPostRequestWithWrongDescriptionMustReturnUserToForm() throws Exception
+    {
+        mockMvc.perform(post("/meals")
+                .param("action", "update")
+                .param("id", "100002")
+                .param("calories", "200")
+                .param("description", "")
+                .param("dateTime", "2014-12-03T21:00"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("meal"))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"));
+    }
+
+    @Test
+    public void updateViaPostRequestWithWrongDateTimeMustReturnUserToForm() throws Exception
+    {
+        mockMvc.perform(post("/meals")
+                .param("action", "update")
+                .param("id", "100002")
+                .param("calories", "200")
+                .param("description", "new description")
+                .param("dateTime", "+"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("meal"))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"));
+    }
+
+    @Test
+    public void updateViaPostRequestWithWrongCaloriesMustReturnUserToForm() throws Exception
+    {
+        mockMvc.perform(post("/meals")
+                .param("action", "update")
+                .param("id", "100002")
+                .param("calories", "+")
+                .param("description", "new description")
+                .param("dateTime", "2014-12-03T21:00"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("meal"))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"));
+    }
+
+    @Test
+    public void updateViaPostRequestWithNullIdMustRenderBadRequest() throws Exception
+    {
+        mockMvc.perform(post("/meals")
+                .param("action", "update"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("error/400"))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/error/400.jsp"));
     }
 
     @Test
@@ -323,14 +412,10 @@ public class AppControllerTest
                 .andExpect(forwardedUrl("/WEB-INF/jsp/error/404.jsp"));
     }
 
-    //toDO need implementation
     @Test
     public void filterRequestWithIllegalStartDate() throws Exception
     {
-        //toDO need implementation
-        return;
-
-        /*LocalDate endDate = LocalDate.of(2015, Month.MAY, 30);
+        LocalDate endDate = LocalDate.of(2015, Month.MAY, 30);
         LocalTime startTime = LocalTime.of(9, 0);
         LocalTime endTime = LocalTime.of(14, 0);
 
@@ -344,7 +429,7 @@ public class AppControllerTest
                 .andExpect(view().name("meals"))
                 .andExpect(forwardedUrl("/WEB-INF/jsp/meals.jsp"))
                 .andExpect(model().attribute("meals", hasSize(2)))
-                .andExpect(model().attribute("meals", Arrays.asList(MEAL2, MEAL1)));*/
+                .andExpect(model().attribute("meals", Arrays.asList(MEAL_WE2, MEAL_WE1)));
     }
 
     //toDO need implementation
