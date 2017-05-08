@@ -38,16 +38,6 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         return meal;
     }
 
-    @PostConstruct
-    public void postConstruct() {
-        LOG.info("+++ PostConstruct");
-    }
-
-    @PreDestroy
-    public void preDestroy() {
-        LOG.info("+++ PreDestroy");
-    }
-
     @Override
     public boolean delete(int id, int userId) {
         Map<Integer, Meal> meals = repository.get(userId);

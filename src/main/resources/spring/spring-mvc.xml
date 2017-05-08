@@ -54,5 +54,15 @@
         </property>
     </bean>
 
-    <!---->
+    <!--Used for proper conversion during spring data binding-->
+    <bean id="conversionService"
+          class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="ru.javawebinar.topjava.util.converters.StringToLocalDateTimeConverter"/>
+                <bean class="ru.javawebinar.topjava.util.converters.StringToLocalDateConverter" />
+                <bean class="ru.javawebinar.topjava.util.converters.StringToLocalTimeConverter" />
+            </set>
+        </property>
+    </bean>
 </beans>

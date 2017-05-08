@@ -4,7 +4,14 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:annotation-config/>
-    <context:component-scan base-package="ru.javawebinar.**.web"/>
     <context:component-scan base-package="ru.javawebinar.**.repository.mock"/>
-    <context:component-scan base-package="ru.javawebinar.**.service"/>
+
+    <bean id="mealService" name="mealService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="ru.javawebinar.topjava.service.MealServiceImpl"/>
+    </bean>
+
+    <bean id="userService" name="userService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="ru.javawebinar.topjava.service.UserServiceImpl"/>
+    </bean>
+
 </beans>

@@ -63,7 +63,7 @@ public class AppController
     @RequestMapping(method = RequestMethod.GET, params = "action=update")
     public String getExistedMealForUpdate(@RequestParam("id") int id, Model model) throws NotFoundException
     {
-        LOG.info("Run: {}-{}", getClass().getSimpleName(), "editMeal()");
+        LOG.info("Run: {}-{}", getClass().getSimpleName(), "getExistedMealForUpdate()");
 
         int userId = AuthorizedUser.id();
         Meal meal = mealService.get(id, userId);
@@ -84,7 +84,7 @@ public class AppController
 
     @RequestMapping(method = RequestMethod.POST, params = "action=update")
     public String updateMeal(@Valid @ModelAttribute("meal") Meal meal, BindingResult bindingResult, Model model)
-            throws IllegalArgumentException
+            throws IllegalArgumentException, NotFoundException
     {
         LOG.info("Run: {}-{}", getClass().getSimpleName(), "updateMeal()");
 
@@ -106,15 +106,17 @@ public class AppController
 
     @RequestMapping(method = RequestMethod.POST, params = "action=create")
     public String createMeal(@Valid @ModelAttribute("meal") Meal meal, BindingResult bindingResult, Model model)
+            throws IllegalArgumentException
     {
         LOG.info("Run: {}-{}", getClass().getSimpleName(), "createMeal()");
+
+        checkNew(meal);
 
         if (hasInvalidCriticalFields(bindingResult))
         {
             return "meal";
         }
 
-        meal.setId(null);
         mealService.save(meal, AuthorizedUser.id());
 
         return "redirect:/meals";
