@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,10 +62,11 @@ public class AppControllerTest
     public void setUp()
     {
         Mockito.reset(mockMealService);
+
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    @Test
+@Test
     public void getAllUserMealsAddToModelAndRenderToMealsView() throws Exception
     {
         when(mockMealService.getAll(USER_ID)).thenReturn(MEALS);

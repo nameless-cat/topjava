@@ -11,7 +11,6 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
-@Transactional(readOnly = true)
 public class JpaUserRepositoryImpl implements UserRepository {
 
 /*
@@ -27,7 +26,6 @@ public class JpaUserRepositoryImpl implements UserRepository {
     private EntityManager em;
 
     @Override
-    @Transactional
     public User save(User user) {
         if (user.isNew()) {
             em.persist(user);
@@ -43,7 +41,6 @@ public class JpaUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    @Transactional
     public boolean delete(int id) {
 
 /*      User ref = em.getReference(User.class, id);

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
@@ -15,6 +16,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFound;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
@@ -25,6 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @CacheEvict(value = "users", allEntries = true)
+    @Transactional
     @Override
     public User save(User user) {
         Assert.notNull(user, "user must not be null");
@@ -32,6 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @CacheEvict(value = "users", allEntries = true)
+    @Transactional
     @Override
     public void delete(int id) throws NotFoundException {
         checkNotFoundWithId(repository.delete(id), id);
@@ -55,6 +59,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @CacheEvict(value = "users", allEntries = true)
+    @Transactional
     @Override
     public void update(User user) {
         Assert.notNull(user, "user must not be null");

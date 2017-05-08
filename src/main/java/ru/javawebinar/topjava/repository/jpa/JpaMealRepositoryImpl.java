@@ -17,14 +17,12 @@ import java.util.List;
  */
 
 @Repository
-@Transactional(readOnly = true)
 public class JpaMealRepositoryImpl implements MealRepository {
 
     @PersistenceContext
     private EntityManager em;
 
     @Override
-    @Transactional
     public Meal save(Meal meal, int userId) {
         if (!meal.isNew() && get(meal.getId(), userId) == null) {
             return null;
@@ -39,7 +37,6 @@ public class JpaMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    @Transactional
     public boolean delete(int id, int userId) {
         return em.createNamedQuery(Meal.DELETE)
                 .setParameter("id", id)

@@ -7,11 +7,11 @@
     <context:component-scan base-package="ru.javawebinar.**.repository.mock"/>
 
     <bean id="mealService" name="mealService" class="org.mockito.Mockito" factory-method="mock">
-        <constructor-arg value="ru.javawebinar.topjava.service.MealServiceImpl"/>
+        <constructor-arg value="ru.javawebinar.topjava.service.MealService"/>
     </bean>
 
     <bean id="userService" name="userService" class="org.mockito.Mockito" factory-method="mock">
-        <constructor-arg value="ru.javawebinar.topjava.service.UserServiceImpl"/>
+        <constructor-arg value="ru.javawebinar.topjava.service.UserService"/>
     </bean>
 
 </beans>
