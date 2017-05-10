@@ -13,13 +13,6 @@ public class StringToLocalDateConverter implements Converter<String, LocalDate>
     @Override
     public LocalDate convert(String source)
     {
-        try
-        {
-            return LocalDate.parse(source);
-
-        } catch (DateTimeParseException e)
-        {
-            return null;
-        }
+        return LocalDate.parse(source);
     }
 }

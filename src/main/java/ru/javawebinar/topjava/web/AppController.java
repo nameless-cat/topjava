@@ -3,7 +3,6 @@ package ru.javawebinar.topjava.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.javawebinar.topjava.AuthorizedUser;
+import ru.javawebinar.topjava.dto.FilterObject;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealWithExceed;
@@ -21,12 +21,9 @@ import ru.javawebinar.topjava.util.ValidationUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.*;
 
@@ -123,26 +120,29 @@ public class AppController
     }
 
     @RequestMapping(method = RequestMethod.POST, params = "action=filter")
-    public String filterMeals(
-            @RequestParam(value = "startDate", required = false) LocalDate startDate,
-            @RequestParam(value = "endDate", required = false) LocalDate endDate,
-            @RequestParam(value = "startTime", required = false) LocalTime startTime,
-            @RequestParam(value = "endTime", required = false) LocalTime endTime,
-            Model model)
+    public String filterMeals(@ModelAttribute("filterObject") FilterObject filterObject, BindingResult bindingResult, Model model)
+            throws IllegalArgumentException
     {
         LOG.info("Run: {}-{}", getClass().getSimpleName(), "filterMeals()");
 
-        if (ValidationUtil.filterFormIsEmpty(startDate, endDate, startTime, endTime))
+        if (bindingResult.hasErrors())
+        {
+            //toDo нужен подробный отчет по полям с ошибками
+            LOG.debug("Filter request with illegal fields");
+            throw new IllegalArgumentException();
+        }
+
+        if (ValidationUtil.filterFormIsEmpty(filterObject))
             return "redirect:/meals";
 
         List<MealWithExceed> meals = MealsUtil.getFilteredWithExceeded(
                 mealService.getBetweenDates(
-                        startDate != null ? startDate : DateTimeUtil.MIN_DATE,
-                        endDate != null ? endDate : DateTimeUtil.MAX_DATE,
+                        filterObject.getStartDate() != null ? filterObject.getStartDate() : DateTimeUtil.MIN_DATE,
+                        filterObject.getEndDate() != null ? filterObject.getEndDate() : DateTimeUtil.MAX_DATE,
                         AuthorizedUser.id()
                 ),
-                startTime != null ? startTime : LocalTime.MIN,
-                endTime != null ? endTime : LocalTime.MAX,
+                filterObject.getStartTime() != null ? filterObject.getStartTime() : LocalTime.MIN,
+                filterObject.getEndTime() != null ? filterObject.getEndTime() : LocalTime.MAX,
                 AuthorizedUser.getCaloriesPerDay()
         );
         model.addAttribute("meals", meals);

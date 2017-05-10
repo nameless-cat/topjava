@@ -14,13 +14,6 @@ public class StringToLocalTimeConverter
     @Override
     public LocalTime convert(String source)
     {
-        try
-        {
-            return LocalTime.parse(source);
-
-        } catch (DateTimeParseException e)
-        {
-            return null;
-        }
+        return LocalTime.parse(source);
     }
 }

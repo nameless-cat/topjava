@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.web;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,7 +65,7 @@ public class AppControllerTest
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-@Test
+    @Test
     public void getAllUserMealsAddToModelAndRenderToMealsView() throws Exception
     {
         when(mockMealService.getAll(USER_ID)).thenReturn(MEALS);
@@ -187,7 +186,8 @@ public class AppControllerTest
                 .param("dateTime", "2014-12-03T21:00"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("meal"))
-                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"));
+                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"))
+                .andExpect(model().attributeHasFieldErrors("meal", "description"));
     }
 
     @Test
@@ -200,7 +200,8 @@ public class AppControllerTest
                 .param("dateTime", "2014-12-03T21:00"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("meal"))
-                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"));
+                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"))
+                .andExpect(model().attributeHasFieldErrors("meal", "calories"));
     }
 
     @Test
@@ -213,7 +214,8 @@ public class AppControllerTest
                 .param("dateTime", "+"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("meal"))
-                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"));
+                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"))
+                .andExpect(model().attributeHasFieldErrors("meal", "dateTime"));
     }
 
     @Test
@@ -227,7 +229,8 @@ public class AppControllerTest
                 .param("dateTime", "2014-12-03T21:00"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("meal"))
-                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"));
+                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"))
+                .andExpect(model().attributeHasFieldErrors("meal", "description"));
     }
 
     @Test
@@ -241,7 +244,8 @@ public class AppControllerTest
                 .param("dateTime", "+"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("meal"))
-                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"));
+                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"))
+                .andExpect(model().attributeHasFieldErrors("meal", "dateTime"));
     }
 
     @Test
@@ -255,7 +259,8 @@ public class AppControllerTest
                 .param("dateTime", "2014-12-03T21:00"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("meal"))
-                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"));
+                .andExpect(forwardedUrl("/WEB-INF/jsp/meal.jsp"))
+                .andExpect(model().attributeHasFieldErrors("meal", "calories"));
     }
 
     @Test
@@ -497,24 +502,15 @@ public class AppControllerTest
         LocalTime startTime = LocalTime.of(9, 0);
         LocalTime endTime = LocalTime.of(14, 0);
 
-        when(mockMealService.getBetweenDates(DateTimeUtil.MIN_DATE, endDate, USER_ID))
-                .thenReturn(Arrays.asList(MEAL3, MEAL2, MEAL1));
-
         mockMvc.perform(post("/meals")
                 .param("action", "filter")
                 .param("startDate", "123")
                 .param("endDate", endDate.toString())
                 .param("startTime", startTime.toString())
                 .param("endTime", endTime.toString()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("meals"))
-                .andExpect(forwardedUrl("/WEB-INF/jsp/meals.jsp"))
-                .andExpect(model().attribute("meals", hasSize(2)))
-                .andExpect(model().attribute("meals", Arrays.asList(MEAL_WE2, MEAL_WE1)));
-
-        verify(mockMealService, times(1))
-                .getBetweenDates(DateTimeUtil.MIN_DATE, endDate, USER_ID);
-        verifyNoMoreInteractions(mockMealService);
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("error/400"))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/error/400.jsp"));
     }
 
     //toDO need implementation

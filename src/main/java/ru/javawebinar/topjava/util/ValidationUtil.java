@@ -4,13 +4,9 @@ package ru.javawebinar.topjava.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindingResult;
+import ru.javawebinar.topjava.dto.FilterObject;
 import ru.javawebinar.topjava.model.BaseEntity;
-import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
-import ru.javawebinar.topjava.web.meal.MealRestController;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class ValidationUtil {
     private ValidationUtil() {
@@ -52,9 +48,12 @@ public class ValidationUtil {
         }
     }
 
-    public static boolean filterFormIsEmpty(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime)
+    public static boolean filterFormIsEmpty(FilterObject filterObject)
     {
-        return (startDate == null && endDate == null && startTime == null && endTime == null);
+        return (filterObject.getStartDate() == null
+                && filterObject.getEndDate() == null
+                && filterObject.getStartTime() == null
+                && filterObject.getEndTime() == null);
     }
 
     public static boolean hasInvalidCriticalFields(BindingResult bindingResult)

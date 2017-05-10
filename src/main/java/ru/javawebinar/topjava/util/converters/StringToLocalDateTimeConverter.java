@@ -14,13 +14,6 @@ public class StringToLocalDateTimeConverter implements Converter<String, LocalDa
     @Override
     public LocalDateTime convert(String source)
     {
-        try
-        {
-            return LocalDateTime.parse(source);
-
-        } catch (DateTimeParseException e)
-        {
-            return null;
-        }
+        return LocalDateTime.parse(source);
     }
 }
