@@ -2,6 +2,7 @@ package ru.javawebinar.topjava;
 
 import ru.javawebinar.topjava.matcher.ModelMatcher;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.to.MealWithExceed;
 
 import java.time.Month;
 import java.util.Arrays;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import static java.time.LocalDateTime.of;
 import static ru.javawebinar.topjava.model.BaseEntity.START_SEQ;
+import static ru.javawebinar.topjava.util.MealsUtil.mealToMealWithExceed;
 
 public class MealTestData {
 
@@ -27,6 +29,15 @@ public class MealTestData {
     public static final Meal ADMIN_MEAL2 = new Meal(ADMIN_MEAL_ID + 1, of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500);
 
     public static final List<Meal> MEALS = Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
+
+    public static final MealWithExceed MEAL_WE1 = mealToMealWithExceed(MEAL1, false);
+    public static final MealWithExceed MEAL_WE2 = mealToMealWithExceed(MEAL2, false);
+    public static final MealWithExceed MEAL_WE3 = mealToMealWithExceed(MEAL3, false);
+    public static final MealWithExceed MEAL_WE4 = mealToMealWithExceed(MEAL4, true);
+    public static final MealWithExceed MEAL_WE5 = mealToMealWithExceed(MEAL5, true);
+    public static final MealWithExceed MEAL_WE6 = mealToMealWithExceed(MEAL6, true);
+
+    public static final List<MealWithExceed> MEALS_WE = Arrays.asList(MEAL_WE6, MEAL_WE5, MEAL_WE4, MEAL_WE3, MEAL_WE2, MEAL_WE1);
 
     public static Meal getCreated() {
         return new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Созданный ужин", 300);
