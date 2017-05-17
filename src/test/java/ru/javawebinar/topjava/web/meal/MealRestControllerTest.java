@@ -209,10 +209,10 @@ public class MealRestControllerTest
     {
         mockMvc.perform(get(BASE_URL)
                 .param("endDateTime", "2015-05-30T14:00:30"))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(ModelMatcher.of(MealWithExceed.class).contentListMatcher(Arrays.asList(MEAL_WE2, MEAL_WE1)))
-                .andDo(print());
+                .andExpect(ModelMatcher.of(MealWithExceed.class).contentListMatcher(Arrays.asList(MEAL_WE2, MEAL_WE1)));
     }
 
     @Test

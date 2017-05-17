@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+import ru.javawebinar.topjava.util.formatters.LocalDateTimeFormat;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -58,11 +59,10 @@ public class MealRestController
     {
         return super.get(id);
     }
-
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MealWithExceed> getAllOrFiltered(
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(value = "startDateTime", required = false) LocalDateTime start,
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam(value = "endDateTime", required = false) LocalDateTime end
+            /*@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)*/ @LocalDateTimeFormat("yyyy-MM-dd'T'HH:mm:ss") @RequestParam(value = "startDateTime", required = false) LocalDateTime start,
+            /*@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)*/ @LocalDateTimeFormat("yyyy-MM-dd'T'HH:mm:ss") @RequestParam(value = "endDateTime", required = false) LocalDateTime end
     )
     {
         if (start == null & end == null)
