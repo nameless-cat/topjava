@@ -223,4 +223,16 @@ public class MealRestControllerTest
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }
+
+    @Test
+    public void getFilteredWithSplitDateAndTimeParamsMustRenderCorrectResult() throws Exception
+    {
+        mockMvc.perform(get(BASE_URL + "/range-filter")
+                .param("endTime", "14-00.30")
+                .param("endDate", "30 May 2015"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(ModelMatcher.of(MealWithExceed.class).contentListMatcher(Arrays.asList(MEAL_WE2, MEAL_WE1)));
+    }
 }

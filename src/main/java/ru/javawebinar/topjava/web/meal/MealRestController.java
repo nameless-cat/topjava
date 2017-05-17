@@ -6,12 +6,16 @@ import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+import ru.javawebinar.topjava.util.formatters.LocalDateFormat;
 import ru.javawebinar.topjava.util.formatters.LocalDateTimeFormat;
+import ru.javawebinar.topjava.util.formatters.LocalTimeFormat;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -61,8 +65,10 @@ public class MealRestController
     }
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MealWithExceed> getAllOrFiltered(
-            /*@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)*/ @LocalDateTimeFormat("yyyy-MM-dd'T'HH:mm:ss") @RequestParam(value = "startDateTime", required = false) LocalDateTime start,
-            /*@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)*/ @LocalDateTimeFormat("yyyy-MM-dd'T'HH:mm:ss") @RequestParam(value = "endDateTime", required = false) LocalDateTime end
+            /*@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)*/
+            @LocalDateTimeFormat("yyyy-MM-dd'T'HH:mm:ss") @RequestParam(value = "startDateTime", required = false) LocalDateTime start,
+            /*@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)*/
+            @LocalDateTimeFormat("yyyy-MM-dd'T'HH:mm:ss") @RequestParam(value = "endDateTime", required = false) LocalDateTime end
     )
     {
         if (start == null & end == null)
@@ -75,5 +81,15 @@ public class MealRestController
                 start != null ? start.toLocalTime() : null,
                 end != null ? end.toLocalDate() : null,
                 end != null ? end.toLocalTime() : null);
+    }
+
+    @GetMapping(value = "/range-filter", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<MealWithExceed> getRangeFiltered(
+            @LocalDateFormat("dd LLL yyyy") @RequestParam(value = "startDate", required = false) LocalDate startDate,
+            @LocalDateFormat("dd LLL yyyy") @RequestParam(value = "endDate", required = false) LocalDate endDate,
+            @LocalTimeFormat("HH-mm.ss") @RequestParam(value = "startTime", required = false) LocalTime startTime,
+            @LocalTimeFormat("HH-mm.ss") @RequestParam(value = "endTime", required = false) LocalTime endTime)
+    {
+        return super.getBetween(startDate, startTime, endDate, endTime);
     }
 }

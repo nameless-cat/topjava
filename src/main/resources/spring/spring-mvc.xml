@@ -27,6 +27,8 @@
         <property name="formatters">
             <set>
                 <bean class="ru.javawebinar.topjava.util.formatters.FormatLocalDateTimeAnnotationFormatterFactory"/>
+                <bean class="ru.javawebinar.topjava.util.formatters.FormatLocalDateAnnotationFormatterFactory"/>
+                <bean class="ru.javawebinar.topjava.util.formatters.FormatLocalTimeAnnotationFormatterFactory"/>
             </set>
         </property>
     </bean>

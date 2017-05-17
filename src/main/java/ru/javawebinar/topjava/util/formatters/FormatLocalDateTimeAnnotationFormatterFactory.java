@@ -29,21 +29,21 @@ public class FormatLocalDateTimeAnnotationFormatterFactory
     @Override
     public Printer<?> getPrinter(LocalDateTimeFormat annotation, Class<?> fieldType)
     {
-        return new PatternFormatter(annotation.value());
+        return new LocalDateTimePatternFormatter(annotation.value());
     }
 
     @Override
     public Parser<?> getParser(LocalDateTimeFormat annotation, Class<?> fieldType)
     {
-        return new PatternFormatter(annotation.value());
+        return new LocalDateTimePatternFormatter(annotation.value());
     }
 
-    private static class PatternFormatter
+    private static class LocalDateTimePatternFormatter
             implements Formatter<LocalDateTime>
     {
         private String[] patterns;
 
-        public PatternFormatter(String[] patterns)
+        public LocalDateTimePatternFormatter(String[] patterns)
         {
             this.patterns = patterns;
         }
