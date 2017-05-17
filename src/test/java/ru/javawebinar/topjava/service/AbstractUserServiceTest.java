@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -14,7 +15,7 @@ import java.util.Collections;
 import java.util.Date;
 
 import static ru.javawebinar.topjava.UserTestData.*;
-
+@Ignore
 public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Autowired

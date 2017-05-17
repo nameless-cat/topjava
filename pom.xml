@@ -30,6 +30,7 @@
         <!--    Tests  -->
         <junit.version>4.12</junit.version>
         <hamcrest.version>1.3</hamcrest.version>
+        <jsonPath.version>2.2.0</jsonPath.version>
 
         <!-- Hibernate -->
         <hibernate.version>5.2.9.Final</hibernate.version>
@@ -250,6 +251,13 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${jackson-json.version}</version>
+        </dependency>
+        <!--need for jsonPath in tests-->
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${jsonPath.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <!--Test-->

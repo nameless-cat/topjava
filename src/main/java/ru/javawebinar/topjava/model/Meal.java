@@ -42,7 +42,7 @@ public class Meal extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
+    //@NotNull commented in sake of validation on controller layer
     private User user;
 
     public Meal() {

@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.util;
 
 
+import org.springframework.validation.BindingResult;
 import ru.javawebinar.topjava.model.BaseEntity;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -40,5 +41,16 @@ public class ValidationUtil {
         } else if (entity.getId() != id) {
             throw new IllegalArgumentException(entity + " must be with id=" + id);
         }
+    }
+
+    public static boolean hasInvalidCriticalFields(BindingResult bindingResult)
+    {
+        for (String field : new String[]{"description", "dateTime", "calories"})
+        {
+            if (bindingResult.getFieldError(field) != null)
+                return true;
+        }
+
+        return false;
     }
 }
