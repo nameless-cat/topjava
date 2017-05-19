@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -19,4 +19,9 @@
     <script type="text/javascript" src="webjars/datatables/1.10.15/media/js/jquery.dataTables.min.js" defer></script>
     <script type="text/javascript" src="webjars/datatables/1.10.15/media/js/dataTables.bootstrap.min.js" defer></script>
     <script type="text/javascript" src="webjars/noty/2.4.1/js/noty/packaged/jquery.noty.packaged.min.js" defer></script>
+
+    <c:set var="jspName" scope="session" value="${pageContext.request.getRequestURI().substring(13, pageContext.request.getRequestURI().lastIndexOf('.'))}"/>
+
+    <script type="text/javascript" src="resources/js/datatablesUtil.js" defer></script>
+    <script type="text/javascript" src="resources/js/${jspName}Datatables.js" defer></script>
 </head>
