@@ -23,4 +23,6 @@ public interface UserService {
     void evictCache();
 
     User getWithMeals(int id);
+
+    void switchActiveStatus(int userId, boolean enabled);
 }

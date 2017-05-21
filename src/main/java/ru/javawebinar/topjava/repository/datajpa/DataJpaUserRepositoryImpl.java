@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
+import javax.naming.OperationNotSupportedException;
 import java.util.List;
 
 @Repository
@@ -43,5 +44,11 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
     @Override
     public User getWithMeals(int id) {
         return crudRepository.getWithMeals(id);
+    }
+
+    @Override
+    public boolean switchActiveStatus(int id, boolean enabled)
+    {
+        return crudRepository.switchActiveStatus(id, enabled) != 0;
     }
 }

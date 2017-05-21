@@ -2,16 +2,22 @@ package ru.javawebinar.topjava.web.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
+import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.UserService;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
-@RequestMapping("/ajax/admin/users")
+@RequestMapping(AdminAjaxController.BASE_URL)
 public class AdminAjaxController extends AbstractUserController {
+
+    public static final String BASE_URL = "/ajax/admin/users";
 
     @Autowired
     public AdminAjaxController(UserService service) {
@@ -42,5 +48,19 @@ public class AdminAjaxController extends AbstractUserController {
         } else {
             super.update(user, id);
         }
+    }
+
+    @PutMapping
+    public void switchActiveStatus(@RequestParam int id, @RequestParam boolean enabled)
+            throws NullPointerException, AccessDeniedException, NotFoundException
+    {
+        User current = super.get(AuthorizedUser.id());
+
+        if (!current.getRoles().contains(Role.ROLE_ADMIN))
+        {
+            throw new AccessDeniedException("Forbidden operation");
+        }
+
+        super.switchActiveStatus(id, enabled);
     }
 }

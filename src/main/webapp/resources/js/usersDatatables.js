@@ -1,5 +1,23 @@
-var ajaxUrl = 'ajax/admin/users/';
+var ajaxUrl = 'ajax/admin/users';
 var datatableApi;
+
+var pageContextEditable = function () {
+    $('.enabled').click(function () {
+        var data = {
+            enabled: $(this).is(':checked'),
+            id: $(this).parents("tr").attr("id")
+        };
+
+        $.ajax({
+            url: ajaxUrl + '?' + $.param(data),
+            method: 'PUT',
+            success: function () {
+                updateTable();
+                successNoty('Status changed');
+            }
+        });
+    });
+};
 
 // $(document).ready(function () {
 $(function () {

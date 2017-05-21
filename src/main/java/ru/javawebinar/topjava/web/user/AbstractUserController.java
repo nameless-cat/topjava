@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.UserService;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.List;
 
@@ -49,5 +50,11 @@ public abstract class AbstractUserController {
     public User getByMail(String email) {
         log.info("getByEmail {}", email);
         return service.getByEmail(email);
+    }
+
+    public void switchActiveStatus(Integer id, Boolean enabled)
+            throws NotFoundException
+    {
+        service.switchActiveStatus(id, enabled);
     }
 }

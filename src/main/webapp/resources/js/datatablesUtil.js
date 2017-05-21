@@ -8,6 +8,9 @@ function makeEditable() {
         return false;
     });
 
+    if (typeof pageContextEditable != "undefined")
+        pageContextEditable();
+
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(event, jqXHR, options, jsExc);
     });
@@ -30,15 +33,20 @@ function deleteRow(id) {
 }
 
 function updateTable() {
-    $.get({
-        url: ajaxUrl + "?" + $("#filterForm").serialize()
-    }, function (data) {
+    $.get({url: ajaxUrl + _queryStringForUpdateTable()}, function (data) {
         datatableApi.clear();
         $.each(data, function (key, item) {
             datatableApi.row.add(item);
         });
         datatableApi.draw();
     });
+}
+
+function _queryStringForUpdateTable() {
+    if (typeof pageContextUpdateTableQuery != "undefined")
+        return pageContextUpdateTableQuery();
+    else
+        return "";
 }
 
 function save() {
@@ -83,8 +91,3 @@ function failNoty(event, jqXHR, options, jsExc) {
     });
 }
 
-function resetFilter() {
-    $("#filterForm").find("input").each(function () {
-        $(this).val("")
-    });
-}

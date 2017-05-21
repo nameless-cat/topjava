@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.matcher.ModelMatcher;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.web.AbstractControllerTest;

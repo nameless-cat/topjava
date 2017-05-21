@@ -30,3 +30,7 @@ header, footer {
     padding: 5px 20px;
     margin: 6px 0;
 }
+
+.inactive {
+    color: #c2c2c2;
+}
