@@ -76,4 +76,15 @@ public class MealAjaxControllerTest
 
         MealTestData.MATCHER.assertCollectionEquals(Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2), service.getAll(USER_ID));
     }
+
+    @Test
+    public void getFilteredMealsMustRenderCorrectListOfMealsWE() throws Exception
+    {
+        mockMvc.perform(get(BASE_URL)
+                .param("endDate", "2015-05-30"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MealTestData.MATCHER_WITH_EXCEED.contentListMatcher(Arrays.asList(MEAL_WE3, MEAL_WE2, MEAL_WE1)));
+    }
 }

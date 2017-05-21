@@ -30,7 +30,9 @@ function deleteRow(id) {
 }
 
 function updateTable() {
-    $.get(ajaxUrl, function (data) {
+    $.get({
+        url: ajaxUrl + "?" + $("#filterForm").serialize()
+    }, function (data) {
         datatableApi.clear();
         $.each(data, function (key, item) {
             datatableApi.row.add(item);
@@ -78,5 +80,11 @@ function failNoty(event, jqXHR, options, jsExc) {
         text: 'Failed: ' + jqXHR.statusText + "<br>",
         type: 'error',
         layout: 'bottomRight'
+    });
+}
+
+function resetFilter() {
+    $("#filterForm").find("input").each(function () {
+        $(this).val("")
     });
 }

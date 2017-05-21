@@ -12,24 +12,29 @@
         <section>
             <h3><spring:message code="meals.title"/></h3>
 
-            <form method="post" action="meals/filter">
+            <form id="filterForm" method="post" action="meals/filter">
                 <dl>
                     <dt><spring:message code="meals.startDate"/>:</dt>
-                    <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
+                    <dd><input type="date" id="startDate" name="startDate" value="${param.startDate}"></dd>
                 </dl>
                 <dl>
                     <dt><spring:message code="meals.endDate"/>:</dt>
-                    <dd><input type="date" name="endDate" value="${param.endDate}"></dd>
+                    <dd><input type="date" id="endDate" name="endDate" value="${param.endDate}"></dd>
                 </dl>
                 <dl>
                     <dt><spring:message code="meals.startTime"/>:</dt>
-                    <dd><input type="time" name="startTime" value="${param.startTime}"></dd>
+                    <dd><input type="time" id="startTime" name="startTime" value="${param.startTime}"></dd>
                 </dl>
                 <dl>
                     <dt><spring:message code="meals.endTime"/>:</dt>
-                    <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
+                    <dd><input type="time" id="endTime" name="endTime" value="${param.endTime}"></dd>
                 </dl>
-                <button type="submit"><spring:message code="meals.filter"/></button>
+                <button class="btn btn-info" type="submit" onclick="updateTable(); return false;">
+                    <span class="glyphicon glyphicon-filter"></span>
+                </button>
+                <button class="btn btn-info" onclick="resetFilter(); return false;">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
             </form>
             <hr>
             <a class="btn btn-info" onclick="add()">

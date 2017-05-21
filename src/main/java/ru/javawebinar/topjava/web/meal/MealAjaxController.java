@@ -7,7 +7,10 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -40,9 +43,14 @@ public class MealAjaxController
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<MealWithExceed> getAll()
+    public List<MealWithExceed> getFilteredOrAll(
+            @RequestParam(value = "startDate", required = false) LocalDate startDate,
+            @RequestParam(value = "endDate", required = false) LocalDate endDate,
+            @RequestParam(value = "startTime", required = false) LocalTime startTime,
+            @RequestParam(value = "endTime", required = false) LocalTime endTime
+                                                 )
     {
-        return super.getAll();
+        return super.getBetween(startDate, startTime, endDate, endTime);
     }
 
     @DeleteMapping(value = "/{id}")
