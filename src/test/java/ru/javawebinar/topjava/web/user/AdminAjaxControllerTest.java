@@ -26,9 +26,8 @@ public class AdminAjaxControllerTest
     @Test
     public void putEnableDisableFlagMustChangeUserActiveStatus() throws Exception
     {
-        mockMvc.perform(put(BASE_URL)
-                .param("enabled", "false")
-                .param("id", String.valueOf(USER_ID)))
+        mockMvc.perform(put(BASE_URL + "/" + String.valueOf(USER_ID))
+                .param("enabled", "false"))
                 .andDo(print())
                 .andExpect(status().isOk());
 

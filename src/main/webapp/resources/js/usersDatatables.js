@@ -3,13 +3,8 @@ var datatableApi;
 
 var pageContextEditable = function () {
     $('.enabled').click(function () {
-        var data = {
-            enabled: $(this).is(':checked'),
-            id: $(this).parents("tr").attr("id")
-        };
-
         $.ajax({
-            url: ajaxUrl + '?' + $.param(data),
+            url: ajaxUrl + _getRestOfUri(this),
             method: 'PUT',
             success: function () {
                 updateTable();
@@ -18,6 +13,14 @@ var pageContextEditable = function () {
         });
     });
 };
+
+var _getRestOfUri = function (element) {
+    var data = {enabled: $(element).is(':checked')};
+    var id = $(element).parents("tr").attr("id");
+
+    return "/" + id + "?" + $.param(data);
+};
+
 
 // $(document).ready(function () {
 $(function () {

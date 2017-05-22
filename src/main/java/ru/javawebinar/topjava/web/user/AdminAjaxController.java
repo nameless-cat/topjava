@@ -50,8 +50,8 @@ public class AdminAjaxController extends AbstractUserController {
         }
     }
 
-    @PutMapping
-    public void switchActiveStatus(@RequestParam int id, @RequestParam boolean enabled)
+    @PutMapping(value = "/{id}")
+    public void switchActiveStatus(@PathVariable int id, @RequestParam boolean enabled)
             throws NullPointerException, AccessDeniedException, NotFoundException
     {
         User current = super.get(AuthorizedUser.id());
